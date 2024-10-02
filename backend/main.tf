@@ -52,6 +52,10 @@ resource "azurerm_storage_container" "sc_backend"{
 
 data "azurerm_client_config" "current" {}
 
+data "azurerm_client_config" "current_user" {
+  # Fetches details about the current logged-in user (yourself)
+}
+
 resource "azurerm_key_vault" "kv_backend" {
   name                        = "${lower(var.kv_backend_name)}${random_string.random_string.result}"
   location                    = azurerm_resource_group.rg_backend.location
@@ -73,6 +77,44 @@ resource "azurerm_key_vault" "kv_backend" {
       "Delete",
       "Purge",
       "Create",
+      "Import",
+      "Recover",
+      "Restore", 
+      "Update",
+    ]
+
+    secret_permissions = [
+      "Get",
+      "List",
+      "Set",
+      "Delete",
+      "Purge",
+      "Recover",
+      "Restore",
+
+    ]
+
+    storage_permissions = [
+      "Get",
+      "Delete",
+      "List",
+      "Backup",
+      "ListSAS",
+      "Set",
+      "Update",
+
+    ]
+  }
+  # Access policy for your user account
+  access_policy {
+    tenant_id = data.azurerm_client_config.current_user.tenant_id
+    object_id = "2feaa029-f2ba-475c-8c42-0a0b9714253b"
+    key_permissions = [
+      "Get",
+      "List",
+      "Delete",
+      "Purge",
+      "Create",
     ]
 
     secret_permissions = [
@@ -85,7 +127,15 @@ resource "azurerm_key_vault" "kv_backend" {
 
     storage_permissions = [
       "Get",
-      "Delete"
+      "Delete",
+      "List",
+      "Backup",
+      "ListSAS",
+      "Set",
+      "Update",
+      "GetSAS",
+      "SetSAS",
+
     ]
   }
 }
