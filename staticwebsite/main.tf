@@ -15,13 +15,13 @@ resource "random_string" "random_string" {
 
 # Create resource group
 resource "azurerm_resource_group" "rg_web" {
-  name     = var.rg_name
+  name     = local.rg_name
   location = var.location
 }
 
 #Create Storage Account
 resource "azurerm_storage_account" "sa_web" {
-  name                     = "${var.sa_name}${random_string.random_string.result}"
+  name                     = "${lower(local.sa_name)}${random_string.random_string.result}"
   resource_group_name      = azurerm_resource_group.rg_web.name
   location                 = azurerm_resource_group.rg_web.location
   account_tier             = "Standard"
