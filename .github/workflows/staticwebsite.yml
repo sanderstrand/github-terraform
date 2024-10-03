@@ -5,7 +5,8 @@ on:
   push:
     paths:
       - 'staticwebsite/**'
-
+  
+      
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -33,14 +34,12 @@ jobs:
 
       - name: 'Check last commit message'
         id: commit
-        run: echo "message=$(git log --format=%B -n 1)" >> $GITHUB_ENV
-
-      - name: 'Conditionally run Terraform action'
+        run: echo "::set-output name=message::$(git log --format=%B -n 1)"
+      - name: 'Conditionally run Terraform action' 
         run: |
           if [[ "${{ steps.commit.outputs.message }}" == *"destroy"* ]]; then
-            terraform destroy -auto-approve
+           terraform destroy -auto-approve
           else 
             terraform apply -auto-approve
-          fi
-        working-directory: ${{ env.WORKING_DIR }}
-      
+          fi 
+        working-directory: ${{ env.WORKING_DIR }}   
