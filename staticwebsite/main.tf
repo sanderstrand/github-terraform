@@ -42,6 +42,9 @@ resource "azurerm_storage_blob" "index_html" {
   content_type           = "text/html"
   #source_content         = "${var.source_content}${local.web_suffix}"
   source_content         = "<h1>Web page created with terraform - helt splitter ny</h1>"
+  lifecycle {
+    replace_triggered_by = [source_content]
+  }
 }
 #kommentar
 
