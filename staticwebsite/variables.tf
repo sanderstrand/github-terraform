@@ -20,7 +20,7 @@ variable "sa_name" {
 variable "source_content" {
   type        = string
   description = "Source content for the index.html filee"
-  default = "<h1>Web page created with terraform - CI/CD - nyeste updaten nynynyny</h1>"
+  default = "<h1>Web page created with terraform - CI/CD - 1600</h1>"
 }
 
 variable "index_document" {
