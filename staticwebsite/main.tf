@@ -42,6 +42,8 @@ resource "azurerm_storage_blob" "index_html" {
   content_type           = "text/html"
   source_content         = "${var.source_content}${local.web_suffix}"
   #source_content         = "<h1>Web page created with terraform - helt splitter ny</h1>"
+  content_md5 = filebase64md5("${path.module}/index.html")  # Calculates the MD5 hash of the file content
+
 }
 #kommentar
 
