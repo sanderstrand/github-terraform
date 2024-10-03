@@ -42,6 +42,7 @@ resource "azurerm_storage_blob" "index_html" {
   content_type           = "text/html"
   source_content         = "${var.source_content}${local.web_suffix}"
 }
+#kommentar
 
 output "primary_web_endpoint" {
   value = azurerm_storage_account.sa_web.primary_web_endpoint
