@@ -37,9 +37,9 @@ jobs:
 
       - name: 'Conditionally run Terraform action'
         run: |
-          if [[ "${{ env.message }}" == *"destroy"* ]]; then
+          if [[ "${{ steps.commit.outputs.message }}" == *"destroy"* ]]; then
             terraform destroy -auto-approve
           else 
             terraform apply -auto-approve
           fi
-        working-directory: ${{ env.WORKING_DIR }}
+      
