@@ -25,7 +25,7 @@ resource "azurerm_storage_account" "sa_web" {
   resource_group_name      = azurerm_resource_group.rg_web.name
   location                 = azurerm_resource_group.rg_web.location
   account_tier             = "Standard"
-  account_replication_type = "GRS"
+  account_replication_type = "LRS"
 
 
   static_website {
@@ -42,9 +42,6 @@ resource "azurerm_storage_blob" "index_html" {
   content_type           = "text/html"
   source_content         = "${var.source_content}${local.web_suffix}"
   #source_content         = "<h1>Web page created with terraform - helt splitter ny</h1>"
-  lifecycle {
-    replace_triggered_by = var.source_content
-  }
 }
 #kommentar
 
