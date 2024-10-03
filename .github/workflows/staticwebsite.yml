@@ -5,17 +5,9 @@ on:
   push:
     paths:
       - 'staticwebsite/**'
-  
-  # `workflow_dispatch` should be on its own and not nested
-  workflow_dispatch:
-    inputs:
-      action_type:
-        description: 'What actions should be performed? (apply/destroy)'
-        required: true
-        default: 'apply'
 
 jobs:
-  resourcegroups:
+  terraform:
     runs-on: ubuntu-latest
 
     name: 'web'
@@ -39,13 +31,15 @@ jobs:
         run: terraform plan
         working-directory: ${{ env.WORKING_DIR }}
 
-      - name: 'Terraform apply'
-        if: github.event.inputs.action_type == 'apply'
-        id: apply
-        run: terraform apply -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
+      - name: 'Check last commit message'
+        id: commit
+        run: echo "message=$(git log --format=%B -n 1)" >> $GITHUB_ENV
 
-      - name: 'Terraform destroy'
-        if: github.event.inputs.action_type == 'destroy'
-        run: terraform destroy -auto-approve
+      - name: 'Conditionally run Terraform action'
+        run: |
+          if [[ "${{ env.message }}" == *"destroy"* ]]; then
+            terraform destroy -auto-approve
+          else 
+            terraform apply -auto-approve
+          fi
         working-directory: ${{ env.WORKING_DIR }}
